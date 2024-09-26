@@ -1,0 +1,25 @@
+---
+title: "eq test"
+author: "Rasmus H. Klokker"
+date: "`r Sys.Date()`"
+header-includes:
+   - \usepackage{longtable}
+   - \usepackage{booktabs}
+   - \usepackage{graphicx}
+   - \usepackage{float}
+   - \usepackage{setspace}\onehalfspacing
+output: bookdown::pdf_document2
+bibliography: tchr_career_lit_2.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+\begin{equation} 
+  \Delta(A,B)= \frac{n_An_B}{n_A+n_B} ||\overrightarrow{m}_A- \overrightarrow{m}_B||^2
+  (\#eq:binom)
+\end{equation} 
+
+look at equation \ref{eq:binom}

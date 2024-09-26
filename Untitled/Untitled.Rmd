@@ -1,0 +1,572 @@
+---
+title: "Going the distance_test"
+subtitle: "The effects of commute distance on teacher recruitment difficulties"
+author: "Rasmus H. Klokker"
+institute: "VIVE"
+date: "29/04/2024 (updated: `r Sys.Date()`)"
+editor_options:
+  chunk_output_type: console
+output:
+  xaringan::moon_reader:
+    self_contained: false
+    lib_dir: libs
+    nature:
+      ratio: "16:9"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
+
+
+```{r setup, echo = FALSE, warning = FALSE, message=FALSE}
+
+
+
+options(htmltools.dir.version = FALSE)
+
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE, dev = "png", dev.args = list(type = "cairo-png"))
+
+#knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message=FALSE, dev = "svglite")
+
+
+
+
+library(ggmap)
+library(RCurl)
+
+library(httr)
+library(jsonlite)
+library(plyr)
+library(patchwork)
+library(gridExtra)
+library(geosphere)
+library(scales)
+library(kableExtra)
+library(purrr)
+library(rgdal)
+library(plotly)
+
+#setwd("C:\\Users\\B059064\\Desktop\\PHD\\conferences and presentations\\CEN 2023")
+
+sogn_travel_dist <- read.table("tables\\sogn_travel_dist.txt",sep=",",check.names=FALSE)
+
+
+ps <- read.table("tables\\des_stats_covars.txt",sep=",",check.names=FALSE)
+
+ps_tchrs <- read.table("tables\\des_stats_tchrs.txt", check.names=FALSE, sep=",")
+
+
+ps_studs <- read.table("tables\\des_stats_studs.txt",sep=",",check.names=FALSE)
+
+
+res_df <- read.table("tables\\DID_commute.txt",sep=",",check.names=FALSE)
+
+
+did_estimaes_df_tchrs_red <- read.table("tables\\did_estimaes_tchrs.txt",sep=",",check.names=FALSE)
+
+
+did_estimaes_df_studs_red <- read.table("tables\\did_estimaes_studs.txt",sep=",",check.names=FALSE)
+
+
+effs <- read.table("tables\\effect_sizes_thresholds.txt",sep=",",check.names=FALSE)
+
+
+
+effs_studs <- read.table("tables\\effect_sizes_thresholds_studs.txt",sep=",",check.names=FALSE)
+
+
+# alt_estimators_tchrs <- readRDS("alt_estimators_tchrs.rds")
+
+did_estimaes_df_tchrs <- read.table("tables\\did_estimaes_tchrs_full.txt",sep=",",check.names=FALSE)
+
+
+
+# alt_estimators_studs <- readRDS("alt_estimators_studs.rds")
+
+did_estimaes_df_studs <- read.table("tables\\did_estimaes_studs_full.txt",sep=",",check.names=FALSE)
+
+dist_thresh_dfs <- read.table("C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\from_DST_results\\results_5-3-2024\\tables\\att_across_dist_thresholds_tchrs.txt", sep=",", check.names=FALSE)
+
+
+bsadid_df_all_comb_mean_tchrs <- read.table("C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\from_DST_results\\results_5-3-2024\\tables\\att_cohort_tchrs.txt", sep=",",check.names=FALSE)
+
+
+
+access_df_agg <- read.table("tables\\tchr_access_df.txt",sep=",",check.names=FALSE)
+
+
+
+
+
+access_df_agg_2 <- read.table("tables\\tchr_access_df_cohort.txt",sep=",",check.names=FALSE)
+
+
+
+access_df_agg_2$dif <- access_df_agg_2$tcrh_access - access_df_agg_2$tchr_access_year
+
+
+# 
+# 
+# 
+# df <- read.table("tables\\number_grads_by_ttc.txt",sep=",",check.names=FALSE)
+# 
+# 
+# df_2 <- read.table("tables\\number_teachers_by_experXschool_reduced.txt",sep=",",check.names=FALSE)
+# 
+
+
+# bsadid_df_all_comb_mean_tchrs <- read.table("tables\\att_cohort_tchrs.txt", sep=",",check.names=FALSE)
+# 
+# bsadid_df_all_comb_mean_studs <- read.table("tables\\att_cohort_studs.txt", sep=",",check.names=FALSE)
+
+
+alt_estimators_df_tchrs <- read.table("tables\\alt_estimators_tchrs.txt", sep=",", 
+                                      check.names = FALSE)
+
+alt_estimators_cohort_df_tchrs <- read.table("tables\\alt_estimators_cohorts_tchrs.txt", sep=",", check.names = FALSE)
+
+alt_estimators_df_studs <- read.table("tables\\alt_estimators_studs.txt", sep=",", 
+                                      check.names = FALSE)
+
+alt_estimators_cohort_df_studs <- read.table("tables\\alt_estimators_cohort_studs.txt", sep=",", check.names = FALSE)
+
+
+dist_thresh_dfs <- read.table("tables\\att_across_dist_thresholds_tchrs.txt", sep=",", check.names=FALSE)
+
+dist_thresh_dfs_stud <- read.table("tables\\att_across_dist_thresholds_studs.txt", sep=",", check.names=FALSE)
+
+outcomes_list_tchrs <- c("avg_age", "avg_seniority", "tchr_pupil_ratio", "teacher_ed_share_new", "avg_hs_GPA", "avg_hs_GPA_young", "avg_year_since_grad", "newgrad_teacher_share")
+
+outcomes_list_studs <- c("avg_hs_GPA_students", "pria_5", "pria_10", "pria_20", "secondedcomp_5", "secondedcomp_10", "secondedcomp_20", "collegecomp_10", "collegecomp_15", "collegecomp_20")
+
+
+#ggplot theme
+
+theme_set(theme_minimal(base_size = 16,base_family = "serif")+ theme(axis.line = element_line(color='black'),
+    plot.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank()))
+
+
+```
+
+
+```{r xaringan-fit-screen, echo=FALSE}
+xaringanExtra::use_fit_screen()
+```
+
+
+
+
+```{r set up TTC data, include=FALSE}
+
+
+#load TTC data------
+
+#only run these lines if you haven't gotten the geodata for the TTC's yet
+
+# ttc.info <- read.csv("TTC_info.csv",sep=";", encoding = "latin1")
+# 
+# #Query Google Maps API for TTC coordinates----
+# 
+# 
+# 
+# 
+# 
+# ##get geodata loop-------
+# 
+# geodata.dfs <- lapply(1:nrow(ttc.info), function(x) {
+#   
+# cat(paste("processing row nr.", x, "\r"))  #progress indicator
+#   
+#   ID <- x
+# 
+# #format address for the API query  
+#   
+# address <- trimws(gsub(" ", "%20", ttc.info$adresse[x])) #insert %20 instead of white space
+# 
+# address <- gsub("\n", "", address) #get rid of line breaks
+# 
+# #construct API query
+# 
+# query <- paste("https://nominatim.openstreetmap.org/search/", address, "?format=json&polygon=1&addressdetails=1", sep="")
+# 
+# #query API
+# 
+# coords <- httr::GET(query)
+# 
+# #we get a json response, but it's in binary code, so we'll reformat using the "content" function from "httr"
+# 
+# json<-content(coords,as="text") 
+# 
+# #and finally we can get our dataframe for the wuery in question
+# 
+# geodata <- fromJSON(json)
+# 
+# #The dataframe has a couple of problematic columns that we'll need to deal with, since we need
+# #to rbind all the dataframes which we get from the loop
+# 
+# 
+# #firstly the "address" column is a dataframe, so well make that into a separate datafram and cbind it to out main dataframe
+# addr.df <- geodata$address
+# 
+# geodata <- cbind(geodata[,-ncol(geodata)], addr.df)
+# 
+# #the column "boundingbox" is a list. Since we don't really need this column, we'll just remove it from the dataframe
+# 
+# ind <- which(names(geodata) %in% "boundingbox")
+# 
+# geodata <- geodata[,-ind]
+# 
+# geodata$ttc_id <- ID
+# 
+# return(geodata)
+# 
+# })
+# 
+# 
+# 
+# geodata.full <- do.call("rbind.fill", geodata.dfs)
+# 
+# #remove duplicates
+# 
+# geodata.full <- geodata.full[!duplicated(geodata.full[,"ttc_id"]),]
+# 
+# 
+# geodata.full <- cbind(geodata.full, ttc.info)
+# 
+# geodata.full$år.nedlagt[is.na(geodata.full$år.nedlagt)] <- 9999
+# 
+#write.csv(geodata.full, file="geodata_TTC.csv")
+
+geodata.full <- read.csv("geodata_TTC.csv", fileEncoding="latin1")
+
+#names(geodata.full)[grep("Ã.r.nedlagt$", names(geodata.full))] <- "year_closed"
+
+
+
+
+
+schools.info <- read.csv("C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\folkeskoledata_all_corrected.csv")
+
+
+#compute distance between schools and TTC's--------
+
+
+schools.info$GEO_BREDDE_GRAD <- as.numeric(gsub(",", ".", schools.info$GEO_BREDDE_GRAD))
+
+schools.info$GEO_LAENGDE_GRAD <- as.numeric(gsub(",", ".", schools.info$GEO_LAENGDE_GRAD))
+
+shp <- readOGR(dsn = "C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\DK_shp\\DNK_adm0.shp", 
+               stringsAsFactors = F)
+
+
+```
+
+
+
+
+
+# Introduction
+
+- Teachers are not distributed equally across schools! 
+
+- Worse, the best teachers are often employed at the schools with the most well off students(Nguyen, 2020; Guarino et al., 2006; Borman & Dowling, 2008)
+
+- Unequal sorting of teachers excacerbate achievement gap between low- and high-SES students(Boyd et al., 2005; Goldhaber, 2012; Sass et al., 2012)
+
+--
+
+- *But how do different characteristics of schools impact how well they can attract teachers?*
+
+
+- *Can we alter characteristics of schools to promote a more equal distribution of teachers?*
+
+
+---
+
+# This paper
+
+- In this paper i investigate what happens when *commute distance* increases for teachers, _specifically newly graduated teachers_.
+
+- To do this, i investigate a natural experiment in which over 33% of danish teacher colleges(TC's) closed
+
+- This meant that some schools experienced an increase in the distance to the nearest TC
+
+## Why commute distance?
+
+- Potential policy lever
+
+
+---
+
+
+# Previous research
+
+## Teacher sorting is a thing!
+
+- The literature generally shows that teachers are unequally distributed across schools
+
+- Both teacher and schools traits impact how teachers are distributed across schools
+
+- teacher credentials(Boyd et al., 2005a; Lankford et al.,
+2007; Podgursky et al., 2004)
+
+- school level poverty(Allen et al., 2018; Smith and Ingersoll, 2007), school
+level achievement(Hanushek et al., 2015; Ingersoll and May, 2012)
+
+- school level achievement(Hanushek et al., 2015; Ingersoll and May, 2012), higher proportions of ethnic minority
+pupils(Allen et al., 2018; Carroll et al., 2000; Falch and Strøm, 2004; Feng, 2014; Hanushek et al., 2015;
+Shen, 1997)
+
+- higher proportions of ethnic minority
+pupils(Allen et al., 2018; Carroll et al., 2000; Falch and Strøm, 2004; Feng, 2014; Hanushek et al., 2015;
+Shen, 1997)
+
+- higher shares of inexperienced teachers, discipline problems, and inadequate support from the
+administration(Ingersoll, 2007a; Shen, 1997)
+
+---
+
+# Previous research
+
+
+## Is teacher sorting such a big deal
+
+- teacher turnover harms student
+achievement(Gibbons, 2018; Henry and Redding, 2020)
+
+- highly skilled
+teachers are more responsive to changes in school characteristics that might change the attractiveness of
+schools, e.g., student body composition(Goldhaber, 2010; Jackson, 2009)
+
+- Studies also find that disadvantaged
+schools “inherit” low-quality teachers from other disadvantaged schools, while high-quality teachers
+transfer to advantaged schools(Goldhaber 2012; Sass et al., 2012)
+
+- Newly graduated highly skilled teachers select into advantaged
+schools(Krieg et al., 2015)
+
+
+---
+
+# Previous research
+
+## Does commute distance seem to impact school attractiveness?
+
+- Commute distance’s impact on teacher attraction has been overlooked compared to other
+factors like student body composition. 
+
+- increasing commute distance from 0 to 6 miles leads to a 19% increase in the probability of
+transferring to a different school(Boyd et al., 2005a)
+
+- living within a distance of 1 mile from an average urban school still preferable to working at an average suburban school located at least 21 miles away. This is despite there being a 60 and 52 percentage point difference between
+urban and suburban schools in proportion of minority students and students living in poverty, respectively,
+as well as urban schools offering lower salaries (Boyd et al., 2012) 
+
+- 10 minutes commute equivalent to a reduction in yearly salary of 530$. By comparison, a ten-percentage point
+reduction in the proportion of students living in poverty is equivalent to a 320$ increase in salary and a
+ten-point increase in the average percentile of performance is equivalent to an increase in salary of 550$ (Johnston, 2020)
+
+---
+
+## How about distance to TTC?
+
+
+- New teachers are 36% more likely to find their first teaching position in the region in which they
+obtained their last educational credential, compared to other regions (Boyd et al., 2005b)
+
+- Prospect teachers complete
+their student teaching near the college from which they obtained their degree, and that student teaching
+placement is highly predictive of where newly graduated teachers find their first teaching position (Krieg et al., 2015)
+
+- An increase in distance to the nearest TTC results in a
+higher proportion of newly hired teachers (Goldhaber et al., 2020)
+
+- number of applicants for vacant positions decreases as the distance to the nearest
+TTC increases (Goff and Bruecker, 2017)
+
+- The relation between the proximity of schools to TTCs and teacher recruitment has only
+been addressed in a few studies(Boyd et al.,2005a)
+
+- however results show that distance to the nearest TTC likey
+has an impact on teacher recruitment(Boyd et al., 2005a; Goldhaber et al., 2020; Krieg et
+al., 2015) Goff and Bruecker (2017)
+
+
+
+
+---
+
+
+
+# This paper
+
+## Hypothesis
+
+```{r hypo-anim}
+
+
+
+# schools.info <- read.csv("C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\folkeskoledata_all_corrected.csv")
+
+
+# geodata.full <- read.csv("C:\\Users\\B059064\\Desktop\\PHD\\papers\\TTC dif in dif\\PHD_dissertation\\geodata_TTC.csv")
+# 
+# geodata_full_samp <- geodata.full[sample(1:nrow(geodata.full), 5),]
+
+pattern <- "Frederiksberg|Haderslev Seminarium|Esbjerg|Odense|Silkeborg"
+
+
+
+geodata_full_samp <- geodata.full[grep(pattern, geodata.full$Seminarium),]
+
+
+#names(geodata.full)[grep("Ã.r.nedlagt$", names(geodata.full))] <- "year_closed"
+
+
+ttc_radius_df <- purrr::map_dfr(1:nrow(geodata_full_samp), function(x){
+  
+  
+  point <- sf::st_point(c(geodata_full_samp$lat[x], geodata_full_samp$lon[x]))
+  
+  point <- sf::st_sfc(point, crs="+proj=longlat +datum=WGS84 +no_defs")
+  
+  buf_round <- sf::st_buffer(point, dist = 20000)
+  
+  buf_round <-as.data.frame(sf::st_coordinates(buf_round))
+  
+  buf_round$ttc <- x
+  
+  return(buf_round)
+  
+
+  
+  
+})
+
+
+
+#compute distance between schools and TTC's--------
+
+
+# schools.info$GEO_BREDDE_GRAD <- as.numeric(gsub(",", ".", schools.info$GEO_BREDDE_GRAD))
+# 
+# schools.info$GEO_LAENGDE_GRAD <- as.numeric(gsub(",", ".", schools.info$GEO_LAENGDE_GRAD))
+
+set.seed(43920)
+
+schools.info_samp <- schools.info[sample(1:nrow(schools.info), 20),]
+
+tch_df <- data.frame(tch_id=1:200, lat=0, lon=0)
+
+# tch_df$lon <- rnorm(200,mean(c(shp@bbox[1],shp@bbox[3])))
+#                     
+# 
+# tch_df$lat <- rnorm(200,mean(c(shp@bbox[2],shp@bbox[4])))
+
+
+#simply take coordinates from school coordinates, to avoid teachers randomluy landing in the sea
+
+
+set.seed(43920)
+
+
+tch_df[c("lat", "lon")] <- schools.info[sample(1:nrow(schools.info),200, replace=TRUE),
+                                             c("GEO_BREDDE_GRAD", "GEO_LAENGDE_GRAD")]
+
+
+lat_lon_pert <- purrr::map_dfr(1:max(ttc_radius_df$ttc), function(x){
+  
+  
+  lat_lon_pert <-  schools.info[which((schools.info$GEO_BREDDE_GRAD<=max(ttc_radius_df$X[ttc_radius_df$ttc==x])&
+                        schools.info$GEO_BREDDE_GRAD>=min(ttc_radius_df$X[ttc_radius_df$ttc==x]))&
+                          (schools.info$GEO_LAENGDE_GRAD<=max(ttc_radius_df$Y[ttc_radius_df$ttc==x])&
+                       schools.info$GEO_LAENGDE_GRAD>=min(ttc_radius_df$Y[ttc_radius_df$ttc==x]))
+                       ),
+               c("GEO_BREDDE_GRAD", "GEO_LAENGDE_GRAD")]
+  
+})
+
+set.seed(43920)
+
+tch_df$time <- "before studying"
+
+tch_df_2 <- tch_df
+
+tch_df_2[c("lat", "lon")] <- lat_lon_pert[sample(1:nrow(lat_lon_pert), 200, replace=TRUE),]
+
+tch_df_2$time <- "while studying"
+
+tch_df <- rbind(tch_df, tch_df_2)
+
+
+
+
+dist_mat <- distm(schools.info_samp[,c("GEO_LAENGDE_GRAD", "GEO_BREDDE_GRAD")], 
+                  tch_df[tch_df$time=="while studying", c("lon", "lat")], fun=distVincentyEllipsoid)
+
+#which schools is closest to each teacher?
+
+school_ind <- apply(dist_mat,2,which.min)
+
+
+tch_df_3 <- cbind(tch_df_2$tch_id, schools.info_samp[school_ind,c("GEO_BREDDE_GRAD", "GEO_LAENGDE_GRAD")], tch_df_2$time)
+
+names(tch_df_3) <- names(tch_df)
+
+tch_df_3$time <- "after graduation"
+
+tch_df <- rbind(tch_df, tch_df_3)
+
+
+#make plot
+
+p <- ggplot() + geom_polygon(data = shp, aes(x = long, y = lat, group = group), colour = "black", fill = NA)
+
+
+p <- p+geom_text(data=geodata_full_samp, aes(x=lon, y=lat), inherit.aes = FALSE, size=10, label="\U1F3DB",
+                 family = "Arial Unicode MS")
+
+
+
+p_base <- p+geom_text(data=schools.info_samp, aes(x=GEO_LAENGDE_GRAD, y=GEO_BREDDE_GRAD), 
+                 inherit.aes = FALSE, size=5, label="\U1F3EB", family = "Arial Unicode MS")
+
+p_base
+
+tch_df$time <- paste(rep(1:3, each=200), tch_df$time)
+
+
+tch_df$size <- rep(c(4,6,8), each=200)
+
+p <- p_base+geom_text(data=tch_df, aes(x=lon, y=lat, frame=time), size=3, label="\UC6C3", 
+                        family = "Arial Unicode MS", position=position_jitter(width=.2,height=.2))
+
+anim <- ggplotly(p)%>% 
+  animation_opts(
+    frame = 1000,
+    transition = 1000,
+    easing = "linear",
+    redraw = FALSE,
+    mode = "immediate"
+  )
+
+
+htmltools::save_html(anim, file="hypo_anim.html") 
+
+#cat(plotly:::plotly_iframe(anim))
+
+anim
+
+
+
+```
+
+
+---
+
+<iframe src="hypo_anim.html" width="800" height="500" scrolling="yes" seamless="seamless" frameBorder="0"> </iframe>

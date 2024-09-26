@@ -1,0 +1,49 @@
+\contentsline {section}{\numberline {1}Introduction}{2}{section.1}%
+\contentsline {section}{\numberline {2}Contribution}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Findings}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}State of the art}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}What do we know about how teachers change jobs over the course of their career?}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}What do we know about how teachers change jobs between schools that serve different kinds of students?}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}What do we know about how teacher characteristics impact career choices?}{7}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Research questions}{9}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Theory}{9}{section.3}%
+\contentsline {subsection}{\numberline {3.1}What shapes the preferences of teachers?}{10}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}How does the professional identity of teachers vary across teachers with different characteristics?}{11}{subsubsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.2}What makes some schools more attractive than others?}{11}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Why do teachers change from one school to another?}{11}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Why do teachers opt out of teaching?}{12}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}How do teacher characteristics impact teacher career choices?}{12}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}How does the theory predict that teachers will shape their carreer paths?}{12}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Data}{15}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Linking teachers and schools}{16}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Teachers' career sequences}{16}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Types of public primary schools}{16}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Constructing school types}{17}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Career decisions outside public primary schools}{18}{subsubsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.3}Teacher characteristics}{18}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Methods}{19}{section.5}%
+\contentsline {subsection}{\numberline {5.1}What are we trying to look at with sequence analysis?}{19}{subsection.5.1}%
+\contentsline {subsubsection}{\numberline {5.1.1}What is a teacher career trajectory?}{19}{subsubsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.2}What is a distribution of teacher career trajectory?}{19}{subsubsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.2}Sequence analysis}{19}{subsection.5.2}%
+\contentsline {subsubsection}{\numberline {5.2.1}Distribution of sequences}{20}{subsubsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.3}sequence similarity}{20}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Hierarchical clustering}{21}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Determining optimal number of clusters}{22}{subsubsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.5}Predicting cluster membership using teacher characteristics}{23}{subsection.5.5}%
+\contentsline {section}{\numberline {6}Imputing school characteristics}{26}{section.6}%
+\contentsline {section}{\numberline {7}Results}{26}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Descriptive statistics}{26}{subsection.7.1}%
+\contentsline {subsubsection}{\numberline {7.1.1}Teachers}{26}{subsubsection.7.1.1}%
+\contentsline {subsubsection}{\numberline {7.1.2}Schools}{27}{subsubsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.2}Sequence analysis}{28}{subsection.7.2}%
+\contentsline {subsubsection}{\numberline {7.2.1}Clustering sequences}{29}{subsubsection.7.2.1}%
+\contentsline {subsection}{\numberline {7.3}Predicting clusters}{31}{subsection.7.3}%
+\contentsline {subsubsection}{\numberline {7.3.1}Performance of ML models}{31}{subsubsection.7.3.1}%
+\contentsline {subsubsection}{\numberline {7.3.2}PDP plots}{31}{subsubsection.7.3.2}%
+\contentsline {subsection}{\numberline {7.4}Robustness checks}{31}{subsection.7.4}%
+\contentsline {section}{\numberline {8}Discussion}{32}{section.8}%
+\contentsline {subsection}{\numberline {8.1}How might patterns of teacher career paths impact the distribution of teachers among high- and low-SES students?}{32}{subsection.8.1}%
+\contentsline {section}{\numberline {9}External validity}{32}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Policy implications}{32}{subsection.9.1}%
+\contentsline {section}{\numberline {10}Conclusion}{32}{section.10}%

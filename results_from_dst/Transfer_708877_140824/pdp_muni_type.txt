@@ -1,0 +1,21 @@
+"var","yhat","yhat_scale","cluster","var_name","yhat_scale_2"
+"1","1 Hovedstadskommune",0.367180654104156,0,"Cluster_1","muni_type",0
+"2","2 Storbykommune",0.372161969848023,0.00498131574386712,"Cluster_1","muni_type",0.33884032854449
+"3","3 Provinsbykommune",0.372277458816951,0.00509680471279544,"Cluster_1","muni_type",0.346696148610327
+"4","4 Oplandskommune",0.381881725152176,0.0147010710480204,"Cluster_1","muni_type",1
+"5","5 Landkommune",0.379680608635344,0.0124999545311886,"Cluster_1","muni_type",0.850275091546602
+"6","1 Hovedstadskommune",0.195363221976454,0,"Cluster_2","muni_type",0
+"7","2 Storbykommune",0.221914565327133,0.0265513433506791,"Cluster_2","muni_type",0.659549939511025
+"8","3 Provinsbykommune",0.224296675029573,0.0289334530531191,"Cluster_2","muni_type",0.718722851758899
+"9","4 Oplandskommune",0.217758513281847,0.0223952913053934,"Cluster_2","muni_type",0.55631132597388
+"10","5 Landkommune",0.235619981563701,0.0402567595872477,"Cluster_2","muni_type",1
+"11","1 Hovedstadskommune",0.233120118415409,0.0706253936249458,"Cluster_3","muni_type",1
+"12","2 Storbykommune",0.180265117649026,0.0177703928585629,"Cluster_3","muni_type",0.251614779705612
+"13","3 Provinsbykommune",0.177488465439097,0.0149937406486347,"Cluster_3","muni_type",0.212299569305887
+"14","4 Oplandskommune",0.165371516702818,0.0028767919123556,"Cluster_3","muni_type",0.0407331097881411
+"15","5 Landkommune",0.162494724790463,0,"Cluster_3","muni_type",0
+"16","1 Hovedstadskommune",0.204336005503982,0,"Cluster_4","muni_type",0
+"17","2 Storbykommune",0.225658347175819,0.0213223416718368,"Cluster_4","muni_type",0.695621009022738
+"18","3 Provinsbykommune",0.225937400714379,0.0216013952103966,"Cluster_4","muni_type",0.704724863892523
+"19","4 Oplandskommune",0.234988244863159,0.0306522393591764,"Cluster_4","muni_type",1
+"20","5 Landkommune",0.222204685010492,0.0178686795065096,"Cluster_4","muni_type",0.582948583205558
