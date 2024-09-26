@@ -548,11 +548,6 @@ I will use the R package "TraMineR" to carry out much of the analysis
 
 In this paper sequences of teacher career decisions are constructed as consecutive teacher career, during the years 1-35 since graduation, decisions within the state space defined by the data. For instance a sequence of career decision in the first 5 years since graduation may look like _school type 1->school type 1->school type 1->private school->private school_ for one teacher and may look like _school type 1->school type 2->school type 2->school type 4->school type 4_ for another teacher. Taken together across all teachers we get a distribution of sequences, where we can asses the share of teachers in each type of career decision across years since graduation, e.g. in year 2 since graduation, 10% of teachers may be employed in school type 1 and 8% are employed in private schools, while in year 3 since graduation 7% of teachers may be employed in school type 1 and 11% are employed in private schools. 
 
-<!-- Short intro to sequence analysis -->
-
-<!--   Mostly descriptive -->
-
-<!-- What is a sequence -->
 
 <!-- will use the R package TraMineR(REF) -->
 
