@@ -555,70 +555,47 @@ In this paper sequences of teacher career decisions are constructed as consecuti
 
 After having constructed the sequences, i will investigate if similar sequences can be clustered together to form different types of career sequences. To do this i will:
 
-1) Measure the similarity between sequences of teacher career sequences, using "optimal matching"[@abbott2000sequence]
+1) Measure the similarity between sequences of teacher career sequences, using "optimal matching"[@abbott2000sequence]. I derive the costs for substitutions from the observed transition rates between states. The transition rates and associated substitution costs are reported in appendix XX. Costs for insertion and deletion are kept at 1
 
-2) Use hierarchical clustering to construct types of career sequences. Additionally i will use range of statistics describing the "fit" of the clustering procedure when the number of clusters vary. This is a data-driven procedure that aims to aid in deciding which number of clusters will lead to the "optimal" clustering of similar sequences of career decisions.
+2) Use hierarchical clustering to construct types of career sequences. Here i will use "Wards method" to form the clusters of career paths. To find the optimal number of clusters, will assess the fit of cluster solutions ranging between one and seven clusters. I will Average Silhoutte Width(AWS) to measure how well each solution fits to data, and select the solution with the best fit. 
 
-## sequence similarity
+<!-- Additionally i will use range of statistics describing the "fit" of the clustering procedure when the number of clusters vary. This is a data-driven procedure that aims to aid in deciding which number of clusters will lead to the "optimal" clustering of similar sequences of career decisions. -->
 
-The similarity of sequences is measured using optimal matching. Optimal matching attempts to align sequences such that they are identical using 3 different operations: Substitution, insertion and deletion. For each of these operations a "cost" assigned, which will ultimately determine how similar sequences are measured to be, following the optimal matching procedure. As an example we can see optimal matching would determine the similarity of the two previous sequences.
+<!-- ## sequence similarity -->
 
-Sequence 1: school type 1 -> school type 1 -> school type 1 -> private school -> private school
+<!-- The similarity of sequences is measured using optimal matching. Optimal matching attempts to align sequences such that they are identical using 3 different operations: Substitution, insertion and deletion. For each of these operations a "cost" assigned, which will ultimately determine how similar sequences are measured to be, following the optimal matching procedure. As an example we can see optimal matching would determine the similarity of the two previous sequences. -->
 
-Sequence 2: school type 1 -> school type 2 -> school type 2 -> school type 4 -> school type 4
+<!-- Sequence 1: school type 1 -> school type 1 -> school type 1 -> private school -> private school -->
 
-In this case 4 operations would be needed to align the sequences:
+<!-- Sequence 2: school type 1 -> school type 2 -> school type 2 -> school type 4 -> school type 4 -->
 
-1: substitute the second element in sequence 1, school type 1, for school type 2 
+<!-- In this case 4 operations would be needed to align the sequences: -->
 
-2: substitute the third element in sequence 1, school type 1, for school type 2 '
+<!-- 1: substitute the second element in sequence 1, school type 1, for school type 2  -->
 
-3: substitute the fourth element in sequence 1, private school, for school type 4 
+<!-- 2: substitute the third element in sequence 1, school type 1, for school type 2 ' -->
 
-4: substitute the fifth element in sequence 1, private school, for school type 4 
+<!-- 3: substitute the fourth element in sequence 1, private school, for school type 4  -->
 
-As such, the distance between sequence 1 and 2 is four operations according to OM
+<!-- 4: substitute the fifth element in sequence 1, private school, for school type 4  -->
 
-In the example above either of the three operations had the same "cost", which was 1. However insertions and deletions can be more or less costly than substitutions and not all substitutions need to have the same cost. For instance substituting school type 4 for school type 1 can be more costly than substituting school type 1 for school type 4. 
+<!-- As such, the distance between sequence 1 and 2 is four operations according to OM -->
 
-The costs for for substitutions,deletions and insertions can be set by the user following e.g. theoretical considerations. In this paper however, i have chosen a data-driven strategy for setting these costs, by relying on the inverse of the observed transition rates between states. As such, the substitution costs between states is given by
+<!-- In the example above either of the three operations had the same "cost", which was 1. However insertions and deletions can be more or less costly than substitutions and not all substitutions need to have the same cost. For instance substituting school type 4 for school type 1 can be more costly than substituting school type 1 for school type 4.  -->
 
-$SC(i,j) = cval - P(i|j) -P(j|i)$
+<!-- The costs for for substitutions,deletions and insertions can be set by the user following e.g. theoretical considerations. In this paper however, i have chosen a data-driven strategy for setting these costs, by relying on the inverse of the observed transition rates between states. As such, the substitution costs between states is given by -->
 
-Where $i$ and $j$ represent states, while $P(i|j)$ and $P(j|i)$ is the probability of transitioning from state $i$ to $j$ and from state $j$ to $i$ respectively. $cval$ is a constant with the value of 2
+<!-- $SC(i,j) = cval - P(i|j) -P(j|i)$ -->
 
-In table \@ref(tab:trate) the observed transition probabilities between states is shown, and in table \@ref(tab:cost) the cost associated with each type of substitution is shown. The insertion and deletion costs are both 1.
+<!-- Where $i$ and $j$ represent states, while $P(i|j)$ and $P(j|i)$ is the probability of transitioning from state $i$ to $j$ and from state $j$ to $i$ respectively. $cval$ is a constant with the value of 2 -->
 
-```{r, trate}
+<!-- ## Hierarchical clustering -->
 
-trate <- read.table("C:\\Users\\b059064\\Desktop\\PHD\\papers\\teacher career paths\\results_from_dst\\Transfer_708877_140824\\trate.txt", sep=",")
+<!-- <!-- ChatGPT used here --> -->
 
-names(trate) <- gsub("->", "", rownames(trate))
+<!-- Hierarchical clustering is a method used to group similar sequences into clusters based on their dissimilarity. It builds a hierarchy or a tree of clusters, known as a dendrogram, which can be cut at different levels to form various numbers of clusters.  -->
 
-knitr::kable(trate, digits=2)
-
-```
-
-```{r, cost}
-
-costs <- read.table("C:\\Users\\b059064\\Desktop\\PHD\\papers\\teacher career paths\\results_from_dst\\Transfer_708877_140824\\costs.txt", sep=",")
-
-costs <- costs[,2:ncol(costs)]
-
-names(costs) <- rownames(costs)
-
-knitr::kable(costs, digits=2)
-
-```
-
-
-## Hierarchical clustering
-
-<!-- ChatGPT used here -->
-
-Hierarchical clustering is a method used to group similar sequences into clusters based on their dissimilarity. It builds a hierarchy or a tree of clusters, known as a dendrogram, which can be cut at different levels to form various numbers of clusters. 
-
-Briefly, hierarchical clustering iterates by merging observations into clusters until all observations belong to one single cluster. The process is depicted in figure \@ref(fig:clus-ex). In this paper i have chosen to use Wards method as the linkage criterion.
+<!-- Briefly, hierarchical clustering iterates by merging observations into clusters until all observations belong to one single cluster. The process is depicted in figure \@ref(fig:clus-ex). In this paper i have chosen to use Wards method as the linkage criterion. -->
 
 <!-- Clustering sequences using Ward linkage implies that, at each step the total within cluster variance is computed between each cluster, is an agglomerative hierarchical clustering technique that minimizes the total within-cluster variance. It does so by selecting the pair of clusters to merge at each step that leads to the smallest possible increase in the sum of squared differences within all clusters.  -->
 <!-- At each step of the algorithm, Ward’s method looks at all possible pairs of clusters and calculates how much the within-cluster variance would increase if those two clusters were merged. It then merges the two clusters that result in the smallest increase in variance. -->
@@ -650,7 +627,7 @@ Briefly, hierarchical clustering iterates by merging observations into clusters 
 
 
 
-```{tikz, clus-ex, fig.cap="adapted from http://www.sthda.com/sthda/RDoc/images/hierarchical-clustering-agnes-diana.png"}
+```{tikz, clus-ex, fig.cap="adapted from http://www.sthda.com/sthda/RDoc/images/hierarchical-clustering-agnes-diana.png", eval=FALSE}
 
 \usetikzlibrary{arrows}
 \usetikzlibrary{shapes}
@@ -713,9 +690,9 @@ Briefly, hierarchical clustering iterates by merging observations into clusters 
 ```
 
 
-### Determining optimal number of clusters
+<!-- ### Determining optimal number of clusters -->
 
-As shown in figure \@ref(fig:clus-ex), the clustering process continues until all individual sequences are clustered into a single cluster, but it does not suggest at which step, the optimal clustering of sequences has been achieved. While, there is no clear consensus on how one decides which number of clusters will be "optimal" there are several measures that can aid the decision. In this paper i have chosen to apply the average silhouette width(ASW) as a measure of fit across solutions with different numbers of clusters, as this measure has several favorable properties. The silhouette width of each sequence can be though of a measure of well each sequence fits into the cluster to which it is assigned. Positive values of silhouette width indicates that a given sequence fits better into the cluster to which it is assigned than to the nearest "neighboring" cluster, i.e. the cluster in which the sequence would have the second best fit. Conversely, a negative value silhouette width indicates that the given sequence would actually fit better in the nearest neighboring cluster than the one to which it is currently assigned[@Studer_2013]. 
+<!-- As shown in figure \@ref(fig:clus-ex), the clustering process continues until all individual sequences are clustered into a single cluster, but it does not suggest at which step, the optimal clustering of sequences has been achieved. While, there is no clear consensus on how one decides which number of clusters will be "optimal" there are several measures that can aid the decision. In this paper i have chosen to apply the average silhouette width(ASW) as a measure of fit across solutions with different numbers of clusters, as this measure has several favorable properties. The silhouette width of each sequence can be though of a measure of well each sequence fits into the cluster to which it is assigned. Positive values of silhouette width indicates that a given sequence fits better into the cluster to which it is assigned than to the nearest "neighboring" cluster, i.e. the cluster in which the sequence would have the second best fit. Conversely, a negative value silhouette width indicates that the given sequence would actually fit better in the nearest neighboring cluster than the one to which it is currently assigned[@Studer_2013].  -->
 
 
 
@@ -727,53 +704,67 @@ In this paper i will investigate the association between a range of teacher char
 
 
 
-I will use the following approaches to investigate the associations between teacher characteristics and types of career sequences:
+I will use the following approaches to investigate the associations between teacher characteristics and types of career sequences: 
 
 <!-- ChatGPT used here -->
 
-* Multinomial logistic regression, implemented via the function "multinom" from the package "nnet" in R
+* Multinomial logistic regression[@NA:3]
 
-* Elastic net regression: Elastic net regression is a type of penalized regression, where regression coefficients are "penalized" according to an amount specified by the user. Elastic net combines both L1- and L2-penalization according to a "mixing weight" which controls the proportion of penalization that is attributed to either L1 or L2 penalization. Elastic Net can handle scenarios with highly correlated features and can perform better than linear regression by reducing overfitting and improving generalization. Elastic net is implemented via the "glmnet" package in R
+* Elastic net regression[@NA]
+
+<!-- Elastic net regression is a type of penalized regression, where regression coefficients are "penalized" according to an amount specified by the user. Elastic net combines both L1- and L2-penalization according to a "mixing weight" which controls the proportion of penalization that is attributed to either L1 or L2 penalization. Elastic Net can handle scenarios with highly correlated features and can perform better than linear regression by reducing overfitting and improving generalization. Elastic net is implemented via the "glmnet" package in R -->
 
 
-* Decision Tree:
-A decision tree is a flowchart-like model that splits data into subsets based on variable values, leading to a tree structure. RPART (Recursive Partitioning and Regression Trees) is an implementation in R.
-Decision trees can capture non-linear relationships and interactions between features, regardless of whether these are specified or not. While this ability of decision trees is not guaranteed to automatically find the true functional form of relationships or all interactions between variables, this ability may still lead to improvements over multinomial regression.Decision trees are implmented via the "rpart" package in R
+* Decision Tree[@NA:1]
 
-* Conditional Inference Tree (ctree):
-A conditional inference tree is a type of decision tree that uses statistical tests to select splits rather than greedy algorithms. It controls for overfitting by stopping the tree when splits are not statistically significant.
-By focusing on statistically significant splits, ctrees reduce the risk of overfitting and can model complex interactions. This may be an improvement over traditional implementations of decision trees, which are prone to overfitting.
+<!-- A decision tree is a flowchart-like model that splits data into subsets based on variable values, leading to a tree structure. RPART (Recursive Partitioning and Regression Trees) is an implementation in R. -->
+<!-- Decision trees can capture non-linear relationships and interactions between features, regardless of whether these are specified or not. While this ability of decision trees is not guaranteed to automatically find the true functional form of relationships or all interactions between variables, this ability may still lead to improvements over multinomial regression.Decision trees are implmented via the "rpart" package in R -->
 
-* Support Vector Machine (SVM):
-SVM is a classification and regression algorithm that finds the hyperplane that best separates data points into different classes. It can handle both linear and non-linear data using kernel functions.
-SVM is particularly effective in high-dimensional spaces and can capture complex, non-linear relationships, offering better performance in cases where linear regression would be insufficient. SVM has proven highly effective in other practical applications.
+* Conditional Inference Tree (ctree)[@NA:8]
 
-* K-Nearest Neighbors (KNN):
-KNN is a simple, non-parametric algorithm that predicts the outcome by averaging the values of the k nearest data points in the feature space.
-KNN can model non-linear relationships without making assumptions about the data distribution, potentially outperforming multinomial regression, especially in cases with complex patterns.
+<!-- A conditional inference tree is a type of decision tree that uses statistical tests to select splits rather than greedy algorithms. It controls for overfitting by stopping the tree when splits are not statistically significant. -->
+<!-- By focusing on statistically significant splits, ctrees reduce the risk of overfitting and can model complex interactions. This may be an improvement over traditional implementations of decision trees, which are prone to overfitting. -->
 
-* Multivariate Adaptive Regression Splines(MARS):
-Known as MARS, this method builds flexible models by creating piecewise linear regressions over different intervals of the data. Similar to decision trees, MARS has the ability to capture unspecified interactions between variables. MARS is a regression approach at its core however, and may therefore be better suited to model continous predictors than decision trees. MARS is implemented via the "earth" package in R. 
+* Support Vector Machine (SVM)[@NA:2]
 
-* Gradient Boosted Trees (GBM):
-GBM is an ensemble technique that builds multiple decision trees sequentially, each trying to correct the errors of the previous ones.
-GBM can model intricate patterns and interactions in the data by combining the strengths of multiple weak learners (decision trees). As such, gradient boosted trees improve upon approaches that use a single decision tree.
+<!-- SVM is a classification and regression algorithm that finds the hyperplane that best separates data points into different classes. It can handle both linear and non-linear data using kernel functions. -->
+<!-- SVM is particularly effective in high-dimensional spaces and can capture complex, non-linear relationships, offering better performance in cases where linear regression would be insufficient. SVM has proven highly effective in other practical applications. -->
 
-* Extreme Gradient Boosting (XGBoost):
-XGBoost is an optimized implementation of gradient boosting that is highly efficient, flexible, and portable, often used in machine learning competitions. XGboost is an extension upon GBM, which is intitially due it's optimized implementation, which reduces computing time. However XGboost also features other extensions, e.g. additional hyperparameters, that may lead to better predictive performance.
+* K-Nearest Neighbors (KNN)[@NA:3]
 
-* Random Forest:
-Random Forest is an ensemble learning method that builds multiple decision trees and combines their predictions to improve accuracy and control overfitting.
-By averaging the predictions from various decision trees, Random Forest reduces variance, can handle large datasets with higher dimensionality, and can capture non-linear relationships. While random forests are initially an improvement upon single decision trees, random forests have shown to deliver good predictive performance even when compared with more advanced machine learning techniques, such as GBM and XGboost.
+
+<!-- KNN is a simple, non-parametric algorithm that predicts the outcome by averaging the values of the k nearest data points in the feature space. -->
+<!-- KNN can model non-linear relationships without making assumptions about the data distribution, potentially outperforming multinomial regression, especially in cases with complex patterns. -->
+
+* Multivariate Adaptive Regression Splines(MARS)[@NA:4]
+
+<!-- Known as MARS, this method builds flexible models by creating piecewise linear regressions over different intervals of the data. Similar to decision trees, MARS has the ability to capture unspecified interactions between variables. MARS is a regression approach at its core however, and may therefore be better suited to model continous predictors than decision trees. MARS is implemented via the "earth" package in R.  -->
+
+* Gradient Boosted Trees (GBM)[@NA:5]
+
+<!-- GBM is an ensemble technique that builds multiple decision trees sequentially, each trying to correct the errors of the previous ones. -->
+<!-- GBM can model intricate patterns and interactions in the data by combining the strengths of multiple weak learners (decision trees). As such, gradient boosted trees improve upon approaches that use a single decision tree. -->
+
+* Extreme Gradient Boosting (XGBoost)[@NA:6]
+
+<!-- XGBoost is an optimized implementation of gradient boosting that is highly efficient, flexible, and portable, often used in machine learning competitions. XGboost is an extension upon GBM, which is intitially due it's optimized implementation, which reduces computing time. However XGboost also features other extensions, e.g. additional hyperparameters, that may lead to better predictive performance. -->
+
+* Random Forest[@NA:7]
+
+<!-- Random Forest is an ensemble learning method that builds multiple decision trees and combines their predictions to improve accuracy and control overfitting. -->
+<!-- By averaging the predictions from various decision trees, Random Forest reduces variance, can handle large datasets with higher dimensionality, and can capture non-linear relationships. While random forests are initially an improvement upon single decision trees, random forests have shown to deliver good predictive performance even when compared with more advanced machine learning techniques, such as GBM and XGboost. -->
 
 For further information on either of the ML techniques readers are referred to [@James_Witten_Hastie_Tibshirani_2021]
 
 <!-- The list of machine learning techniques i have chosen here are often among the techniques that deliver the best predictive performance when dealing with ordered and tablular data, as is the case here. Conversely, while neural networks have shown to outperform all the techniques listed above in the presence of unordered data, e.g. text or images, neural networks often show, at best, a predictive performance that is comparable to the techniques presented above. As such, i have chosen not investigate whether neural networks may provide better predictive performance than multinomial regression, as these types of machine learning techniques typically require a large amount of computing time.  -->
 
-In order to asses the predictive performance and find the optimal combination of hyperparameter configurations for each ML technique i apply repeated K-fold cross-validation(CV). Briefly, CVinvolves splitting data into K partitions, usually denoted "folds", where each partition divides the full data into "training" and "testing" parts. The model is then fitted on the training portion of the data and the fitted model is then used to predict the outcome in the test-portion of the data, as depicted in \@ref(fig:cv-figure). CV, or similar procedures, are crucial when assessing the predictive performance of ML techniques. For many of these techniques, the flexibility and complexity can be substantial and the techniques may overfit to data as a result, which skews measures of predictive performance in a positive direction. As such, CV functions as a general and non-parametric way of giving an unbiased estimate of predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In that sense CV also serves as a standardized way of comparing techniques for which the internal workings differ greatly. In my application i use 10-fold CV, which is repeated 2 times.
+In order to asses the predictive performance and find the optimal combination of hyperparameter configurations for each ML technique i apply repeated K-fold cross-validation(CV). Briefly, CV involves splitting data into K partitions, usually denoted "folds", where each partition divides the full data into "training" and "testing" parts. The model is then fitted on the training portion of the data and the fitted model is then used to predict the outcome in the test-portion of the data, as depicted in \@ref(fig:cv-figure). The difference between these predictions and then observed values in the test data is then used a measure of predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In my application i use 10-fold CV, which is repeated 2 times.
 
 
-```{tikz, cv-figure, fig.cap="Depiction of 5-fold CV, adapted from https://www.sharpsightlabs.com/wp-content/uploads/2024/02/cross-validation-explained_FEATURED-IMAGE.png}
+<!-- CV, or similar procedures, are crucial when assessing the predictive performance of ML techniques. For many of these techniques, the flexibility and complexity can be substantial and the techniques may overfit to data as a result, which skews measures of predictive performance in a positive direction. As such, CV functions as a general and non-parametric way of giving an unbiased estimate of predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In that sense CV also serves as a standardized way of comparing techniques for which the internal workings differ greatly. In my application i use 10-fold CV, which is repeated 2 times. -->
+
+
+```{tikz, cv-figure, fig.cap="Depiction of 5-fold CV, adapted from https://www.sharpsightlabs.com/wp-content/uploads/2024/02/cross-validation-explained_FEATURED-IMAGE.png", eval=FALSE}
 
 
 \usetikzlibrary{matrix, positioning, calc}
@@ -835,7 +826,7 @@ To measure the predictive performance i will use Cohens Kappa, which is given by
 In which $p_0$ is the proportion of agreements between predictions and observed values, while $p_t$ is the hypothetical proportion of agreement between predictions and observed values purely by chance. The kappa value ranges between 0 and 1, where 0 indicates that predictions and observed values are in no better agreement than what could be expected by chance. I have chosen Cohens Kappa as a measure of predictive performance, given that this measure is robust to "class imbalance", i.e. some categories of the outcome being much more prevalent than others. For instance, if the typology of career sequences is dominated by a single type in which 90% of teachers are assigned, then it would be easy to get 90% of predictions correct simply by predicting all teachers to be in the most prevalent type. The kappa value is robust to such a situation however[@gong2021novel]
 
 
-Cross-validation and fitting of all ML techniques were implemented using the "caret" package in R
+Cross-validation and fitting of all ML techniques were implemented using the "caret" package in R[@NA:9]
 
 
 # Imputing school characteristics
@@ -1259,4 +1250,33 @@ As such, these results suggest that the effort to combat teacher shortages and u
 <!-- - Teacher characteristics, measured at the time of graduation, are very poor predictors of which type of career path teachers follow -->
 
 
+
+# Appendix
+
+
+## Observed transition rates and substitution costs
+
+In table \@ref(tab:trate) the observed transition probabilities between states is shown, and in table \@ref(tab:cost) the cost associated with each type of substitution is shown. The insertion and deletion costs are both 1.
+
+```{r, trate}
+
+trate <- read.table("C:\\Users\\b059064\\Desktop\\PHD\\papers\\teacher career paths\\results_from_dst\\Transfer_708877_140824\\trate.txt", sep=",")
+
+names(trate) <- gsub("->", "", rownames(trate))
+
+knitr::kable(trate, digits=2)
+
+```
+
+```{r, cost}
+
+costs <- read.table("C:\\Users\\b059064\\Desktop\\PHD\\papers\\teacher career paths\\results_from_dst\\Transfer_708877_140824\\costs.txt", sep=",")
+
+costs <- costs[,2:ncol(costs)]
+
+names(costs) <- rownames(costs)
+
+knitr::kable(costs, digits=2)
+
+```
 
