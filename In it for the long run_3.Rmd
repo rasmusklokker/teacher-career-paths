@@ -716,65 +716,16 @@ After constructing the sequences, I will investigate if similar sequences can be
 ## Predicting cluster membership using teacher characteristics
 
 
-In this paper, I will investigate the association between a range of teacher characteristics and the types of career paths that teachers are assigned to via the clustering procedure. In order to account for unspecified non-linear functional forms, interactions between predictors, or other deviations from classical regression frameworks, I will apply flexible machine learning (ML) techniques. Many of these techniques are known to "learn" the functional form of associations between outcomes and predictors from data. Additionally, tree-based techniques, such as decision trees, random forests, and gradient boosted trees, are known to also learn unspecified interactions between predictors. I will also compare the predictive performance of the ML techniques with the performance of multinomial regression, which is the traditional estimation technique used to investigate relations between predictors and typologies of sequences[@liao2022sequence].
+In this paper, I will investigate the association between a range of teacher characteristics and the types of career paths that teachers are assigned to via the clustering procedure. In order to account for unspecified non-linear functional forms, interactions between predictors, or other deviations from classical regression frameworks, I will apply flexible machine learning (ML) techniques, e.g. penalized regression estimators, spline-based regression estimators, tree-based ML techniques and ensembles of ML techniques such as random forest. Many of these techniques are known to "learn" the functional form of associations between outcomes and predictors from data. Additionally, tree-based techniques, such as decision trees, random forests, and gradient boosted trees, are known to also learn unspecified interactions between predictors[@James_Witten_Hastie_Tibshirani_2021]. I will also compare the predictive performance of the ML techniques with the performance of multinomial regression, which is the traditional estimation technique used to investigate relations between predictors and typologies of sequences[@liao2022sequence].
+
+For a full list of ML techniques, readers are referred to appendix XX
 
 
+In order to assess the predictive performance and find the optimal combination of hyperparameter configurations for each ML technique, I apply repeated K-fold cross-validation(CV). Briefly, CV involves splitting data into K partitions, usually denoted "folds", where each partition divides the full data into "training" and "testing" parts. The model is then fitted on the training portion of the data, and the fitted model is then used to predict the outcome in the test-portion of the data. The difference between these predictions and observed values in the test data is then used to measure predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In my application, I use a 10-fold CV, which is repeated two times. I also use CV to tune the hyperparameters and select the opmtimal hyperparameter settings of the ML techniques. 
+I will use Cohens Kappa as the primary metric for measuring the predictive performance of ML techniques, and select the ML technique and hyperparameter setting with the highest average Kappa value.
 
-I will use the following approaches to investigate the associations between teacher characteristics and types of career sequences: 
+Cross-validation and fitting of all ML techniques were implemented using the "caret" package in R[@caret]
 
-<!-- ChatGPT used here -->
-
-* Multinomial logistic regression[@nnet]
-
-* Elastic net regression[@enet]
-
-<!-- Elastic net regression is a type of penalized regression, where regression coefficients are "penalized" according to an amount specified by the user. Elastic net combines both L1- and L2-penalization according to a "mixing weight" which controls the proportion of penalization that is attributed to either L1 or L2 penalization. Elastic Net can handle scenarios with highly correlated features and can perform better than linear regression by reducing overfitting and improving generalization. Elastic net is implemented via the "glmnet" package in R -->
-
-
-* Decision Tree[@rpart]
-
-<!-- A decision tree is a flowchart-like model that splits data into subsets based on variable values, leading to a tree structure. RPART (Recursive Partitioning and Regression Trees) is an implementation in R. -->
-<!-- Decision trees can capture non-linear relationships and interactions between features, regardless of whether these are specified or not. While this ability of decision trees is not guaranteed to automatically find the true functional form of relationships or all interactions between variables, this ability may still lead to improvements over multinomial regression.Decision trees are implmented via the "rpart" package in R -->
-
-* Conditional Inference Tree (ctree)[@ctree]
-
-<!-- A conditional inference tree is a type of decision tree that uses statistical tests to select splits rather than greedy algorithms. It controls for overfitting by stopping the tree when splits are not statistically significant. -->
-<!-- By focusing on statistically significant splits, ctrees reduce the risk of overfitting and can model complex interactions. This may be an improvement over traditional implementations of decision trees, which are prone to overfitting. -->
-
-* Support Vector Machine (SVM)[@svm]
-
-<!-- SVM is a classification and regression algorithm that finds the hyperplane that best separates data points into different classes. It can handle both linear and non-linear data using kernel functions. -->
-<!-- SVM is particularly effective in high-dimensional spaces and can capture complex, non-linear relationships, offering better performance in cases where linear regression would be insufficient. SVM has proven highly effective in other practical applications. -->
-
-* K-Nearest Neighbors (KNN)[@nnet]
-
-
-<!-- KNN is a simple, non-parametric algorithm that predicts the outcome by averaging the values of the k nearest data points in the feature space. -->
-<!-- KNN can model non-linear relationships without making assumptions about the data distribution, potentially outperforming multinomial regression, especially in cases with complex patterns. -->
-
-* Multivariate Adaptive Regression Splines(MARS)[@earth]
-
-<!-- Known as MARS, this method builds flexible models by creating piecewise linear regressions over different intervals of the data. Similar to decision trees, MARS has the ability to capture unspecified interactions between variables. MARS is a regression approach at its core however, and may therefore be better suited to model continous predictors than decision trees. MARS is implemented via the "earth" package in R.  -->
-
-* Gradient Boosted Trees (GBM)[@gbm]
-
-<!-- GBM is an ensemble technique that builds multiple decision trees sequentially, each trying to correct the errors of the previous ones. -->
-<!-- GBM can model intricate patterns and interactions in the data by combining the strengths of multiple weak learners (decision trees). As such, gradient boosted trees improve upon approaches that use a single decision tree. -->
-
-* Extreme Gradient Boosting (XGBoost)[@xgboost]
-
-<!-- XGBoost is an optimized implementation of gradient boosting that is highly efficient, flexible, and portable, often used in machine learning competitions. XGboost is an extension upon GBM, which is intitially due it's optimized implementation, which reduces computing time. However XGboost also features other extensions, e.g. additional hyperparameters, that may lead to better predictive performance. -->
-
-* Random Forest[@ranger]
-
-<!-- Random Forest is an ensemble learning method that builds multiple decision trees and combines their predictions to improve accuracy and control overfitting. -->
-<!-- By averaging the predictions from various decision trees, Random Forest reduces variance, can handle large datasets with higher dimensionality, and can capture non-linear relationships. While random forests are initially an improvement upon single decision trees, random forests have shown to deliver good predictive performance even when compared with more advanced machine learning techniques, such as GBM and XGboost. -->
-
-For further information on either of the ML techniques, readers are referred to [@James_Witten_Hastie_Tibshirani_2021]
-
-<!-- The list of machine learning techniques i have chosen here are often among the techniques that deliver the best predictive performance when dealing with ordered and tablular data, as is the case here. Conversely, while neural networks have shown to outperform all the techniques listed above in the presence of unordered data, e.g. text or images, neural networks often show, at best, a predictive performance that is comparable to the techniques presented above. As such, i have chosen not investigate whether neural networks may provide better predictive performance than multinomial regression, as these types of machine learning techniques typically require a large amount of computing time.  -->
-
-In order to assess the predictive performance and find the optimal combination of hyperparameter configurations for each ML technique, I apply repeated K-fold cross-validation(CV). Briefly, CV involves splitting data into K partitions, usually denoted "folds", where each partition divides the full data into "training" and "testing" parts. The model is then fitted on the training portion of the data, and the fitted model is then used to predict the outcome in the test-portion of the data, as depicted in \@ref(fig:cv-figure). The difference between these predictions and observed values in the test data is then used to measure predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In my application, I use a 10-fold CV, which is repeated two times.
 
 
 <!-- CV, or similar procedures, are crucial when assessing the predictive performance of ML techniques. For many of these techniques, the flexibility and complexity can be substantial and the techniques may overfit to data as a result, which skews measures of predictive performance in a positive direction. As such, CV functions as a general and non-parametric way of giving an unbiased estimate of predictive performance[@James_Witten_Hastie_Tibshirani_2021]. In that sense CV also serves as a standardized way of comparing techniques for which the internal workings differ greatly. In my application i use 10-fold CV, which is repeated 2 times. -->
@@ -827,22 +778,21 @@ In order to assess the predictive performance and find the optimal combination o
 ```
 
 
-Many ML techniques have several hyperparameters that impact the predictive performance, e.g., the degree of penalization of elastic net or the number of trees to aggregate in random forest. To pick the optimal combination of these hyperparameters for each technique, each technique will be fit, using CV, on a range of hyperparameter combinations. The hyperparameter combination with the best predictive performance will then be chosen. For models with few adjustable hyperparameters, I will use a "grid search" to assess all combinations of chosen hyperparameter values. For techniques with more adjustable hyperparameters, in this case, GBM, XGBoost, and random forest, I will pick 200 random hyperparameter combinations. Using random hyperparameter combinations is often an effective way to cover the search space of hyperparameter combinations, as opposed to doing a grid search which quickly results in thousands of hyperparameter combinations to asses in order to cover the hyperparameter search space adequately[@10.5555/2188385.2188395]
+<!-- Many ML techniques have several hyperparameters that impact the predictive performance, e.g., the degree of penalization of elastic net or the number of trees to aggregate in random forest. To pick the optimal combination of these hyperparameters for each technique, each technique will be fit, using CV, on a range of hyperparameter combinations. The hyperparameter combination with the best predictive performance will then be chosen. For models with few adjustable hyperparameters, I will use a "grid search" to assess all combinations of chosen hyperparameter values. For techniques with more adjustable hyperparameters, in this case, GBM, XGBoost, and random forest, I will pick 200 random hyperparameter combinations. Using random hyperparameter combinations is often an effective way to cover the search space of hyperparameter combinations, as opposed to doing a grid search which quickly results in thousands of hyperparameter combinations to asses in order to cover the hyperparameter search space adequately[@10.5555/2188385.2188395] -->
 
 
 
-To measure the predictive performance, I will use Cohens Kappa, which is given by
+<!-- To measure the predictive performance, I will use Cohens Kappa, which is given by -->
 
-\begin{equation} 
-  \kappa=\frac{p_0-p_t}{1-p_t}
-  (\#eq:kappa)
-\end{equation}
-
-
-In which $p_0$ is the proportion of agreements between predictions and observed values, while $p_t$ is the hypothetical proportion of agreement between predictions and observed values purely by chance. The kappa value ranges between 0 and 1, where 0 indicates that predictions and observed values are in no better agreement than what could be expected by chance. I have chosen Cohens Kappa as a measure of predictive performance, given that this measure is robust to "class imbalance", i.e., some categories of the outcome being much more prevalent than others. For instance, if the typology of career sequences is dominated by a single type in which 90% of teachers are assigned, then it would be easy to get 90% of predictions correct simply by predicting all teachers to be in the most prevalent type. The kappa value is robust to such a situation, however[@gong2021novel]
+<!-- \begin{equation}  -->
+<!--   \kappa=\frac{p_0-p_t}{1-p_t} -->
+<!--   (\#eq:kappa) -->
+<!-- \end{equation} -->
 
 
-Cross-validation and fitting of all ML techniques were implemented using the "caret" package in R[@caret]
+<!-- In which $p_0$ is the proportion of agreements between predictions and observed values, while $p_t$ is the hypothetical proportion of agreement between predictions and observed values purely by chance. The kappa value ranges between 0 and 1, where 0 indicates that predictions and observed values are in no better agreement than what could be expected by chance. I have chosen Cohens Kappa as a measure of predictive performance, given that this measure is robust to "class imbalance", i.e., some categories of the outcome being much more prevalent than others. For instance, if the typology of career sequences is dominated by a single type in which 90% of teachers are assigned, then it would be easy to get 90% of predictions correct simply by predicting all teachers to be in the most prevalent type. The kappa value is robust to such a situation, however[@gong2021novel] -->
+
+
 
 
 ## Imputing school characteristics
@@ -863,6 +813,7 @@ In the following, I will present descriptive statistics for both teachers and th
 
 Table \@ref(tab:des-teach) presents descriptive statistics for teachers in the first year since graduation. Statistics are presented across teacher "cohorts", which indicate the year each cohort graduated from teacher college.
 The majority of teachers are unmarried, female, and do not have any children. Further, nearly all teachers are from the ethnic majority.
+Importantly, table \@ref(tab:des-teach) also shows that the variable "number of children in household" does not cover before 1984. This is an important caveat in assessing the associations between teacher characteristics and types of teacher career paths, as i will apply listwise deletion for missing values. As such, the sample used for assessing associations between teacher characteristics and types of teacher career paths effectively does not include teachers from the 1980-1983 cohorts.
 
 ```{=latex}
 \setlength{\LTpost}{0mm}
@@ -873,14 +824,14 @@ The majority of teachers are unmarried, female, and do not have any children. Fu
 \textbf{Characteristic} & \textbf{Overall}, N = 13,283\textsuperscript{\textit{1}} & \textbf{1980}, N = 2,533\textsuperscript{\textit{1}} & \textbf{1981}, N = 2,382\textsuperscript{\textit{1}} & \textbf{1982}, N = 2,342\textsuperscript{\textit{1}} & \textbf{1983}, N = 2,208\textsuperscript{\textit{1}} & \textbf{1984}, N = 2,114\textsuperscript{\textit{1}} & \textbf{1985}, N = 1,704\textsuperscript{\textit{1}} \\ 
 \midrule\addlinespace[2.5pt]
 age & 29 (5) & 29 (5) & 29 (5) & 29 (5) & 29 (5) & 29 (5) & 29 (5) \\ 
-unmarried & 7,596 (57\%) & 1,303 (51\%) & 1,285 (54\%) & 1,291 (55\%) & 1,292 (59\%) & 1,311 (62\%) & 1,114 (65\%) \\ 
-female & 7,770 (58\%) & 1,413 (56\%) & 1,350 (57\%) & 1,368 (58\%) & 1,280 (58\%) & 1,295 (61\%) & 1,064 (62\%) \\ 
-number of children in household & 0.70 (2.25) & NA (NA) & NA (NA) & NA (NA) & NA (NA) & 0.75 (2.91) & 0.64 (0.90) \\ 
+unmarried & 57\% & 51\% & 54\% & 55\% & 59\% & 62\% & 65\% \\ 
+female & 58\% & 56\% & 57\% & 58\% & 58\% & 61\% & 62\% \\ 
+number of children in household & 0.70 (2.25) & NA & NA & NA & NA & 0.75 (2.91) & 0.64 (0.90) \\ 
 Unknown & 9,465 & 2,533 & 2,382 & 2,342 & 2,208 & 0 & 0 \\ 
 Ethnic minority status &  &  &  &  &  &  &  \\ 
-Born in Denmark & 13,089 (99\%) & 2,501 (99\%) & 2,335 (98\%) & 2,304 (98\%) & 2,181 (99\%) & 2,088 (99\%) & 1,680 (99\%) \\ 
-Immigrant & 152 (1.1\%) & 26 (1.0\%) & 37 (1.6\%) & 28 (1.2\%) & 19 (0.9\%) & 23 (1.1\%) & 19 (1.1\%) \\ 
-1st generation descendant of immigrants & 42 (0.3\%) & 6 (0.2\%) & 10 (0.4\%) & 10 (0.4\%) & 8 (0.4\%) & 3 (0.1\%) & 5 (0.3\%) \\ 
+Born in Denmark & 99\% & 99\% & 98\% & 98\% & 99\% & 99\% & 99\% \\ 
+Immigrant & 1.1\% & 1.0\% & 1.6\% & 1.2\% & 0.9\% & 1.1\% & 1.1\% \\ 
+1st generation descendant of immigrants & 0.3\% & 0.2\% & 0.4\% & 0.4\% & 0.4\% & 0.1\% & 0.3\% \\ 
 \bottomrule
 \end{longtable}
 \begin{minipage}{\linewidth}
@@ -903,7 +854,7 @@ Immigrant & 152 (1.1\%) & 26 (1.0\%) & 37 (1.6\%) & 28 (1.2\%) & 19 (0.9\%) & 23
 
 ### Schools
 
-Table \@ref(tab:des-schools) presents descriptive results for the different types of schools. The average score of the school characteristics scale for each school type is reported in the bottom row. Here, we can see how school characteristics vary across school types, with schools above the 75th percentile of the school characteristics scale having more than 20 months of additional education, compared to schools between the 0th and 25th percentile for both mothers and fathers. The pattern is similar for the remaining school characteristics. 
+Table \@ref(tab:des-schools) presents descriptive results for the different types of schools. The average score of the school characteristics scale for each school type is reported in the bottom row. Here, we can see how school characteristics vary across school types, with parents in schools above the 75th percentile of the school characteristics scale having more than 20 months of additional education, on average, compared to schools between the 0th and 25th percentile for both mothers and fathers. The pattern is similar for the remaining school characteristics. 
 
 ```{=latex}
 \setlength{\LTpost}{0mm}
@@ -1029,7 +980,7 @@ In addition to the teacher characteristics detailed in this paper's _data_ secti
 
 ## Variable importance
 
-This section will investigate the strength of the association between the included variables and cluster membership. While predictive performance was generally good for the best performing techniques, measures of variable importance suggest that measures of misclassification were far more predictive of cluster membership than teacher characteristics. Variable importance measures of advanced ML techniques are generally hard to interpret. I, therefore, use the predicted probabilities of cluster membership across a range of values of each teacher characteristic to construct an alternative measure of variable importance. Briefly, the measure is simply the difference between the lowest predicted probability of cluster membership and the highest predicted probability of cluster membership. For instance, if we predict the probability of membership to cluster 2 across a range of values of teacher high-school GPA, we may find that the lowest predicted probability is 12% at a value of 6.5, while the highest predicted probability is 20% at a value of 10.7. As such, teachers are maximally able to increase their probability of membership to cluster two by eight percentage points across high-school GPA. This difference is then averaged across the four clusters for each variable. 
+This section will investigate the strength of the association between the included variables and cluster membership. While predictive performance was generally good for the best performing techniques, measures of variable importance suggest that measures of misclassification were far more predictive of cluster membership than teacher characteristics. Variable importance measures of advanced ML techniques are generally hard to interpret. I, therefore, use the predicted probabilities of cluster membership across a range of values of each teacher characteristic to construct an alternative measure of variable importance. Briefly, the measure is simply the difference between the lowest predicted probability of cluster membership and the highest predicted probability of cluster membership. For instance, if we predict the probability of membership to cluster 2 across a range of values of teacher high-school GPA, we may find that the lowest predicted probability is 12% at a value of 6.5, while the highest predicted probability is 20% at a value of 10.7. As such, teachers are maximally able to increase their probability of membership to cluster two by eight percentage points across high-school GPA. This difference is then averaged across the four clusters for each variable. This kind of measure of variable importance is similar to the suggestion of @greenwell, who suggests to use the standard deviation of the predicted values as a measure of variable importance. Both the measure suggested here, and that of @greenwell can be seen as measures of dispersion of the predicted values. However i will argue, that the difference between the minimum and maximum values are easier to interpret than the standard deviation. 
 
 <!-- $importance=\frac{1}{c}\sum_{1}^{c}min(p)-max(p)$ -->
 
@@ -1071,13 +1022,22 @@ pdp_files <- pdp_files[-grep("inter", pdp_files)]
 
 
 
-
-pdp_plots <- lapply(pdp_files, function(x){
+pdp_plots <- lapply(1:length(pdp_files), function(x){
+  
+  file <- pdp_files[x]
   
 
-  pdp_dat <- read.table(x, sep=",")
+  pdp_dat <- read.table(file, sep=",")
   
   pdp_dat$cluster <- gsub("_", " ", pdp_dat$cluster)
+  
+pdp_dat$cluster <- gsub("Cluster 1", "Cluster 1 - Leavers ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 2", "Cluster 2 - Teaching the marginalized ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 3", "Cluster 3 - Teaching the affluent ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 4", "Cluster 4 - All-round teachers ", pdp_dat$cluster)
 
 
 lab <- unique(pdp_dat$var_name)
@@ -1101,6 +1061,11 @@ p <- ggplot(pdp_dat, aes(x=var, y=yhat_scale))+geom_smooth(se=FALSE, color="blac
     p <- ggplot(pdp_dat, aes(x=var, y=yhat_scale))+geom_bar(stat="identity")+facet_wrap(~cluster, nrow=1)+labs(x=lab, y="Predicted probability scaled")+theme(axis.text.x = element_text(angle=90, vjust=.5))
 }
 
+if (x>1) {
+  
+  p <- p+theme(strip.text.x = element_blank())
+}
+
 return(p)
   
 })
@@ -1120,13 +1085,24 @@ pdp_files <- list.files("C:\\Users\\b059064\\Desktop\\PHD\\papers\\teacher caree
 
 pdp_files <- pdp_files[grep("inter", pdp_files)]
 
-pdp_plots <- lapply(pdp_files, function(x){
+pdp_plots <- lapply(1:length(pdp_files), function(x){
   
-  #x <- pdp_files[3]
+  #x <- 1
+
+  file <- pdp_files[x]
   
-  pdp_dat <- read.table(x, sep=",")
+  pdp_dat <- read.table(file, sep=",")
   
+
   pdp_dat$cluster <- gsub("_", " ", pdp_dat$cluster)
+  
+    pdp_dat$cluster <- gsub("Cluster 1", "Cluster 1 - Leavers ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 2", "Cluster 2 - Teaching the marginalized ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 3", "Cluster 3 - Teaching the affluent ", pdp_dat$cluster)
+
+pdp_dat$cluster <- gsub("Cluster 4", "Cluster 4 - All-round teachers ", pdp_dat$cluster)
   
   lab_1 <- unique(pdp_dat$var_name_x)
   
@@ -1169,6 +1145,12 @@ pdp_plots <- lapply(pdp_files, function(x){
   p <- ggplot(pdp_dat, aes(x=var, y=yhat_scale, color=var2, group=var2))+geom_smooth(se=FALSE)+facet_wrap(~cluster, nrow=1)+labs(x=lab, y="Predicted probability scaled", color=col_lab)
   
   }
+  
+  if (x>1) {
+  
+  p <- p+theme(strip.text.x = element_blank())
+}
+
   
   return(p)
   
@@ -1284,6 +1266,65 @@ As such, these results suggest that the effort to combat teacher shortages and u
 
 
 # Appendix
+
+## List of ML techniques
+
+
+
+
+I will use the following approaches to investigate the associations between teacher characteristics and types of career sequences: 
+
+<!-- ChatGPT used here -->
+
+* Multinomial logistic regression[@nnet]
+
+* Elastic net regression[@enet]
+
+<!-- Elastic net regression is a type of penalized regression, where regression coefficients are "penalized" according to an amount specified by the user. Elastic net combines both L1- and L2-penalization according to a "mixing weight" which controls the proportion of penalization that is attributed to either L1 or L2 penalization. Elastic Net can handle scenarios with highly correlated features and can perform better than linear regression by reducing overfitting and improving generalization. Elastic net is implemented via the "glmnet" package in R -->
+
+
+* Decision Tree[@rpart]
+
+<!-- A decision tree is a flowchart-like model that splits data into subsets based on variable values, leading to a tree structure. RPART (Recursive Partitioning and Regression Trees) is an implementation in R. -->
+<!-- Decision trees can capture non-linear relationships and interactions between features, regardless of whether these are specified or not. While this ability of decision trees is not guaranteed to automatically find the true functional form of relationships or all interactions between variables, this ability may still lead to improvements over multinomial regression.Decision trees are implmented via the "rpart" package in R -->
+
+* Conditional Inference Tree (ctree)[@ctree]
+
+<!-- A conditional inference tree is a type of decision tree that uses statistical tests to select splits rather than greedy algorithms. It controls for overfitting by stopping the tree when splits are not statistically significant. -->
+<!-- By focusing on statistically significant splits, ctrees reduce the risk of overfitting and can model complex interactions. This may be an improvement over traditional implementations of decision trees, which are prone to overfitting. -->
+
+* Support Vector Machine (SVM)[@svm]
+
+<!-- SVM is a classification and regression algorithm that finds the hyperplane that best separates data points into different classes. It can handle both linear and non-linear data using kernel functions. -->
+<!-- SVM is particularly effective in high-dimensional spaces and can capture complex, non-linear relationships, offering better performance in cases where linear regression would be insufficient. SVM has proven highly effective in other practical applications. -->
+
+* K-Nearest Neighbors (KNN)[@nnet]
+
+
+<!-- KNN is a simple, non-parametric algorithm that predicts the outcome by averaging the values of the k nearest data points in the feature space. -->
+<!-- KNN can model non-linear relationships without making assumptions about the data distribution, potentially outperforming multinomial regression, especially in cases with complex patterns. -->
+
+* Multivariate Adaptive Regression Splines(MARS)[@earth]
+
+<!-- Known as MARS, this method builds flexible models by creating piecewise linear regressions over different intervals of the data. Similar to decision trees, MARS has the ability to capture unspecified interactions between variables. MARS is a regression approach at its core however, and may therefore be better suited to model continous predictors than decision trees. MARS is implemented via the "earth" package in R.  -->
+
+* Gradient Boosted Trees (GBM)[@gbm]
+
+<!-- GBM is an ensemble technique that builds multiple decision trees sequentially, each trying to correct the errors of the previous ones. -->
+<!-- GBM can model intricate patterns and interactions in the data by combining the strengths of multiple weak learners (decision trees). As such, gradient boosted trees improve upon approaches that use a single decision tree. -->
+
+* Extreme Gradient Boosting (XGBoost)[@xgboost]
+
+<!-- XGBoost is an optimized implementation of gradient boosting that is highly efficient, flexible, and portable, often used in machine learning competitions. XGboost is an extension upon GBM, which is intitially due it's optimized implementation, which reduces computing time. However XGboost also features other extensions, e.g. additional hyperparameters, that may lead to better predictive performance. -->
+
+* Random Forest[@ranger]
+
+<!-- Random Forest is an ensemble learning method that builds multiple decision trees and combines their predictions to improve accuracy and control overfitting. -->
+<!-- By averaging the predictions from various decision trees, Random Forest reduces variance, can handle large datasets with higher dimensionality, and can capture non-linear relationships. While random forests are initially an improvement upon single decision trees, random forests have shown to deliver good predictive performance even when compared with more advanced machine learning techniques, such as GBM and XGboost. -->
+
+For further information on either of the ML techniques, readers are referred to [@James_Witten_Hastie_Tibshirani_2021]
+
+<!-- The list of machine learning techniques i have chosen here are often among the techniques that deliver the best predictive performance when dealing with ordered and tablular data, as is the case here. Conversely, while neural networks have shown to outperform all the techniques listed above in the presence of unordered data, e.g. text or images, neural networks often show, at best, a predictive performance that is comparable to the techniques presented above. As such, i have chosen not investigate whether neural networks may provide better predictive performance than multinomial regression, as these types of machine learning techniques typically require a large amount of computing time.  -->
 
 
 ## Observed transition rates and substitution costs

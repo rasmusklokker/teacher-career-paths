@@ -1145,7 +1145,7 @@ pdp_plots <- lapply(pdp_files, function(x){
   
 
 
-patchwork::wrap_plots(pdp_plots,nrow=3,ncol=1)+patchwork::plot_layout(axis_titles = "collect")
+patchwork::wrap_plots(pdp_plots,nrow=3,ncol=1)+patchwork::plot_layout(axis_titles = "collect", guides="collect")
 
 
 ```
